@@ -24,8 +24,8 @@
 
 * `Clicking 1 allows the peer to see a list of all the peers available`
 * `Clicking 2 allows the peer to get information about other peers`
-* Clicking 3 allows the peer to send a message to another peer'
-* Clicking 4 allows the peer to exit the network
+* 'Clicking 3 allows the peer to send a message to another peer'
+* 'Clicking 4 allows the peer to exit the network'
 
 
 **Link to blog: https://dsu2025.wordpress.com**
