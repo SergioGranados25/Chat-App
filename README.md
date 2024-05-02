@@ -12,21 +12,20 @@
 
 ## Getting Started
 
-### Prerequisites
-
-* List needed software or libraries
 
 ### To run this app 
 
-1. **Start server.py in command line by running: python3 Server.py**
-2. **Run client.py in command line by running: python3 client.py**
+1. To start the server run the command 'python3 Server.py' this would start the server, making peers be found, registering peers, and allowing them to exit.
+2. To start the client run the command 'python3 client.py' this would allow for peers to connect to the server, retrieve peer details, send and recieve messages.
 
 ### Usage
 
-1. **Register by clicking**
-2. **Check peer list by selecting 1**
-3. **get peers information by selecting 2**
-4. **Send message to peer by selecting 3**
-5. **Exit network by selecting 4**
+**After running both the client and server, these are the following actions a peer might take.**
+
+* `Clicking 1 allows the peer to see a list of all the peers available`
+* `Clicking 2 allows the peer to get information about other peers`
+* Clicking 3 allows the peer to send a message to another peer'
+* Clicking 4 allows the peer to exit the network
+
 
 **Link to blog: https://dsu2025.wordpress.com**
