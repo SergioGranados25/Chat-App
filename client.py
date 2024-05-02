@@ -53,7 +53,6 @@ def request_peer_info(server_ip, server_port, username):
     s.connect((server_ip, server_port))
     s.send(f"GET {username}".encode())
     data = s.recv(1024).decode()
-    print(data)
     s.close()
     return data
 
@@ -70,11 +69,36 @@ def servexit(server_ip, server_port, username):
     print('Exited successfully!')
     s.close()
 
+def get_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip_address = s.getsockname()[0]
+    except Exception as e:
+        print("Error:", e)
+        ip_address = None
+    finally:
+        s.close()
+    return ip_address
+
+def get_unused_port():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind(('localhost', 0))
+        port = s.getsockname()[1]
+    except Exception as e:
+        print("Error:", e)
+        port = None
+    finally:
+        s.close()
+    return port
+
 
 def main_peer(host, ip, port, server_ip, server_port):
     username = input("Enter your username: ")
     threading.Thread(target=start_peer_server, args=(host, port)).start()
     register_with_server(server_ip, server_port, username, ip, port)
+    users = {}
 
     while True:
         print("\nMenu:")
@@ -88,13 +112,16 @@ def main_peer(host, ip, port, server_ip, server_port):
             request_peers(server_ip, server_port)
         elif choice == '2':
             peer_username = input("Enter peer username: ")
-            print(request_peer_info(server_ip, server_port, peer_username))
+            users[peer_username] = request_peer_info(server_ip, server_port, peer_username)
+            print(peer_username, users[peer_username])
         elif choice == '3':
             peer_username = input("Enter peer username for message: ")
-            message = input("Enter message: ")
-            peer_info = request_peer_info(server_ip, server_port, peer_username)
-            if peer_info != 'Not found':
+            exists = users.get(peer_username)
+            if exists != None:
+                message = input('Enter message:')
+                peer_info = users[peer_username]
                 ip, port = peer_info.split(':')
+                message = (f'\n<<{username}>> {message}')
                 send_message(ip, port, message)
             else:
                 print("Peer not found")
@@ -106,6 +133,7 @@ def main_peer(host, ip, port, server_ip, server_port):
         else:
             print("Invalid choice, please try again.")
 
-host, port = '10.54.35.48', 12001
-server_ip, server_port = '10.54.36.155', 12000
-main_peer(host, host, port, server_ip, server_port)
+if __name__ == "__main__":
+    host, port = get_ip_address(), get_unused_port()
+    server_ip, server_port = '10.54.36.155', 12000
+    main_peer(host, host, port, server_ip, server_port)
