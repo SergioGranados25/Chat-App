@@ -108,8 +108,6 @@ topics_in_computer_science = [
 
 topic = random.choice(topics_in_computer_science)
 
-print(topic)
-
 def handle_peer(conn, addr):
     while True:
         try:
@@ -119,6 +117,7 @@ def handle_peer(conn, addr):
             if data.startswith('REGISTER'):
                 print(peers)
                 print(data)
+                _, username, ip, port = data.split()
                 
                 if peers.get(username) != None:
                     conn.sendall(b'Username already registered')
