@@ -27,18 +27,11 @@ def register_with_server(server_ip, server_port, username, my_ip, my_port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((server_ip, server_port))
     s.send(f"REGISTER {username} {my_ip} {my_port}".encode())
-    
-    # Receive response from the server
     response = s.recv(2048).decode()
-    
-    # Check if username is already registered
     if response == 'Username already registered':
         print('There is already a user registered with that username')
         s.close()
         return False
-    
-    # Process greeting if registration is successful
-    
     s.close()
     return True
 
