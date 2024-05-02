@@ -7,7 +7,7 @@ def handle_incoming_messages(conn, addr):
             message = conn.recv(1024).decode()
             if not message:
                 break
-            print(f"\nMessage from {addr}: {message}")
+            print(f"{message}")
         except:
             break
     conn.close()
@@ -21,11 +21,27 @@ def start_peer_server(host, port):
         conn, addr = server_socket.accept()
         threading.Thread(target=handle_incoming_messages, args=(conn, addr)).start()
 
+import socket
+
 def register_with_server(server_ip, server_port, username, my_ip, my_port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((server_ip, server_port))
     s.send(f"REGISTER {username} {my_ip} {my_port}".encode())
+    
+    # Receive response from the server
+    response = s.recv(2048).decode()
+    
+    # Check if username is already registered
+    if response == 'Username already registered':
+        print('There is already a user registered with that username')
+        s.close()
+        return False
+    
+    # Process greeting if registration is successful
+    
     s.close()
+    return True
+
 
 def request_peers(server_ip, server_port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,6 +62,14 @@ def request_peers(server_ip, server_port):
             print(f'{i}: {user[1:len(user) - 1]}')
         else:
             print(f'{i}: {full_data[i]}')
+    s.close()
+
+def request_topic(server_ip, server_port):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((server_ip, server_port))
+    s.send(b"TOPIC")
+    topic = s.recv(4096).decode()
+    print(f"Welcome to CompsHI! Today's topic is: {topic}")
     s.close()
 
 def request_peer_info(server_ip, server_port, username):
@@ -97,7 +121,10 @@ def get_unused_port():
 def main_peer(host, ip, port, server_ip, server_port):
     username = input("Enter your username: ")
     threading.Thread(target=start_peer_server, args=(host, port)).start()
-    register_with_server(server_ip, server_port, username, ip, port)
+    while register_with_server(server_ip, server_port, username, ip, port) == False:
+        username = input("Enter new username: ")
+    request_topic(server_ip, server_port)
+    
     users = {}
 
     while True:
