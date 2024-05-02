@@ -18,13 +18,15 @@
 
 ### To run this app 
 
-1. ...
-2. ...
+1. **Start server.py in command line by running: python3 Server.py**
+2. **Run client.py in command line by running: python3 client.py**
 
 ### Usage
 
-* `Code Example 1`
-* `Code Example 2`
-
+1. **Register by clicking**
+2. **Check peer list by selecting 1**
+3. **get peers information by selecting 2**
+4. **Send message to peer by selecting 3**
+5. **Exit network by selecting 4**
 
 **Link to blog: https://dsu2025.wordpress.com**
