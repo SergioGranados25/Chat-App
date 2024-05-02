@@ -7,7 +7,7 @@ def handle_incoming_messages(conn, addr):
             message = conn.recv(1024).decode()
             if not message:
                 break
-            print(f"Message from {addr}: {message}")
+            print(f"\nMessage from {addr}: {message}")
         except:
             break
     conn.close()
@@ -53,7 +53,9 @@ def request_peer_info(server_ip, server_port, username):
     s.connect((server_ip, server_port))
     s.send(f"GET {username}".encode())
     data = s.recv(1024).decode()
+    print(data)
     s.close()
+    return data
 
 def send_message(ip, port, message):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -104,6 +106,6 @@ def main_peer(host, ip, port, server_ip, server_port):
         else:
             print("Invalid choice, please try again.")
 
-host, port = '127.0.0.1', 12001
+host, port = '10.54.35.48', 12001
 server_ip, server_port = '10.54.36.155', 12000
 main_peer(host, host, port, server_ip, server_port)
